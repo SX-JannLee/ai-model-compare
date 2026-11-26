@@ -1,12 +1,18 @@
 import { chromium } from "playwright";
+import { mkdir } from "node:fs/promises";
+import { join } from "node:path";
 
 const base = process.argv[2] ?? "http://127.0.0.1:4173";
+const outDir = process.argv[3] ?? "docs/evidence";
 const browser = await chromium.launch();
 const routes = [
   ["/", "home"],
   ["/models/", "models"],
   ["/models/claude-fable-5-2/", "model"],
+  ["/match/", "match"],
   ["/compare/", "compare"],
+  ["/compare/?models=claude-fable-5-2,kimi-k3-1-pro", "compare-share"],
+  ["/changelog/", "changelog"],
   ["/benchmarks/", "benchmarks"],
   ["/news/", "news"],
 ];
@@ -74,13 +80,19 @@ for (const [route, name] of routes) {
   }
 }
 
+await mkdir(outDir, { recursive: true });
+
 for (const [route, name, width, height, full] of [
-  ["/", "after-home", 1440, 900, true],
-  ["/", "after-home-hero", 1440, 900, false],
-  ["/", "after-mobile", 390, 844, true],
+  ["/", "after-home-1440-full", 1440, 900, true],
+  ["/", "after-home-1440", 1440, 900, false],
+  ["/", "after-home-390-full", 390, 844, true],
   ["/models/", "after-models", 1440, 900, true],
   ["/models/claude-fable-5-2/", "after-model", 1440, 900, true],
+  ["/match/", "after-match", 1440, 900, true],
+  ["/match/", "after-match-mobile", 390, 844, true],
   ["/compare/", "after-compare", 1440, 900, true],
+  ["/compare/?models=claude-fable-5-2,kimi-k3-1-pro", "after-compare-share", 1440, 900, true],
+  ["/changelog/", "after-changelog", 1440, 900, true],
   ["/benchmarks/", "after-benchmarks", 1440, 900, false],
   ["/news/", "after-news", 1440, 900, false],
 ]) {
@@ -92,11 +104,11 @@ for (const [route, name, width, height, full] of [
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(300);
   await page.screenshot({
-    path: `docs/evidence/${name}.png`,
+    path: join(outDir, `${name}.png`),
     fullPage: Boolean(full),
   });
   await page.close();
-  console.log(`saved docs/evidence/${name}.png`);
+  console.log(`saved ${join(outDir, `${name}.png`)}`);
 }
 
 await browser.close();

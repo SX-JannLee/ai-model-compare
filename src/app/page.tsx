@@ -72,6 +72,7 @@ const jsonLd = {
 };
 
 const tickerItems = [
+  `v${SITE.version} 上线 · 选型向导 + 可分享对比`,
   `综合第一 ${top.name} · ${top.intelligence.toFixed(1)}`,
   `开源第一 ${openPick.name} · ${openPick.intelligence.toFixed(1)}`,
   `单任务成本最低 ${cheapest.name} · $${cheapest.costPerTask.toFixed(2)}`,
@@ -86,26 +87,28 @@ export default function HomePage() {
       <section className="hero">
         <div className="shell hero-grid">
           <div className="hero-copy">
-            <p className="eyebrow">Frontier AI Index · 2026.11</p>
+            <p className="eyebrow">Frontier AI Index · v{SITE.version}</p>
             <h1>
               <span className="line">看清前沿模型</span>
               <span className="line accent">的真实差距</span>
             </h1>
             <p className="lede">
               汇总 {models.length} 款前沿大模型、{DIMENSIONS.length} 个能力维度与真实
-              API 价格。用一张图回答：谁最强、谁最值、谁最适合你的任务。
+              API 价格。先看清谁最强、谁最值，再按任务、预算与上下文，
+              三步选出最适合你的那一款。
             </p>
             <div className="hero-actions">
-              <Link className="btn btn-primary" href="/models/">
-                查看完整榜单 <span aria-hidden="true">→</span>
+              <Link className="btn btn-primary" href="/match/">
+                三步选型 <span aria-hidden="true">→</span>
               </Link>
-              <Link className="btn btn-ghost" href="/compare/">
-                自由叠加对比
+              <Link className="btn btn-ghost" href="/models/">
+                查看完整榜单
               </Link>
             </div>
             <p className="hero-meta">
               <span>数据快照 {SITE.dataDate}</span>
               <span>{models.length} 款模型 / 10 家厂商</span>
+              <span>v{SITE.version}</span>
               <span>来源 {SITE.sourceName}</span>
             </p>
           </div>
@@ -223,10 +226,57 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section" id="value">
+      <section className="section" id="match">
         <div className="shell">
           <SectionHead
             no="02"
+            title="从榜单到选型"
+            desc="分数回答谁更强；选型还要回答做什么、花多少、上下文多长。三步收敛到 3 个候选，每个都给出理由。"
+            linkHref="/match/"
+            linkLabel="打开选型向导"
+          />
+          <div className="match-teaser">
+            <div className="match-teaser-copy">
+              <p className="eyebrow">Model Match · v{SITE.version}</p>
+              <h3>不选「最强」，选「最适合」。</h3>
+              <p>
+                把任务重点、预算敏感度、上下文长度和开源偏好交给选型向导，
+                得到带理由的前三名；一键带入对比页，把推荐继续看细。
+              </p>
+              <div className="match-teaser-actions">
+                <Link className="btn btn-primary btn-small" href="/match/">
+                  开始三步选型 <span aria-hidden="true">→</span>
+                </Link>
+                <span className="match-teaser-note">
+                  无需登录 · 浏览器本地计算
+                </span>
+              </div>
+            </div>
+            <ol className="match-steps">
+              <li className="match-step">
+                <span className="match-step-no">01</span>
+                <b>选任务</b>
+                <p>编程、推理、智能体、长文……在七维能力里挑出重点。</p>
+              </li>
+              <li className="match-step">
+                <span className="match-step-no">02</span>
+                <b>定约束</b>
+                <p>预算敏感度、上下文窗口，以及是否只看开源权重。</p>
+              </li>
+              <li className="match-step">
+                <span className="match-step-no">03</span>
+                <b>得候选</b>
+                <p>返回匹配度最高的 3 款，附评分理由与下一步链接。</p>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section className="section" id="value">
+        <div className="shell">
+          <SectionHead
+            no="03"
             title="价格 × 能力"
             desc="横轴是每百万输出 tokens 的价格（对数刻度），纵轴是综合智能。越靠左上，单位价格换来的能力越多。"
             linkHref="/models/"
@@ -259,7 +309,7 @@ export default function HomePage() {
       <section className="section" id="capability">
         <div className="shell">
           <SectionHead
-            no="03"
+            no="04"
             title="能力雷达"
             desc="七个维度都是 0–100 的原始通过率，不做跨维度归一化。把三款代表模型叠在一起，缺口就是差异。"
             linkHref="/compare/"
@@ -310,7 +360,7 @@ export default function HomePage() {
       <section className="section" id="matrix">
         <div className="shell">
           <SectionHead
-            no="04"
+            no="05"
             title="维度矩阵"
             desc="把 16 款模型 × 7 个维度摊开。颜色只表示相对强弱，具体数值才是判断依据。"
             linkHref="/benchmarks/"
@@ -323,7 +373,7 @@ export default function HomePage() {
       <section className="section" id="news">
         <div className="shell">
           <SectionHead
-            no="05"
+            no="06"
             title="最新动态"
             desc="只收录模型厂商与官方研究博客，附原文链接。快照之外的变化，以来源为准。"
             linkHref="/news/"
@@ -361,7 +411,7 @@ export default function HomePage() {
       <section className="section" id="method">
         <div className="shell">
           <SectionHead
-            no="06"
+            no="07"
             title="我们如何比较"
             desc="同一套指数、同一时点的价格、最高推理档位。所有数字都可以回溯到公开来源。"
             linkHref="/benchmarks/"

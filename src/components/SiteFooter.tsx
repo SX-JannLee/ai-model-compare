@@ -19,9 +19,11 @@ export function SiteFooter() {
         <div className="footer-col">
           <p className="footer-label">浏览</p>
           <Link href="/models/">模型库</Link>
+          <Link href="/match/">选型向导</Link>
           <Link href="/compare/">模型对比</Link>
           <Link href="/benchmarks/">评测方法</Link>
           <Link href="/news/">最新动态</Link>
+          <Link href="/changelog/">更新日志</Link>
         </div>
 
         <div className="footer-col">
@@ -32,7 +34,9 @@ export function SiteFooter() {
           <a href={SITE.repo} target="_blank" rel="noreferrer">
             GitHub 仓库 ↗
           </a>
-          <p className="footer-meta">快照 {SITE.dataDate}</p>
+          <p className="footer-meta">
+            v{SITE.version} · 快照 {SITE.dataDate}
+          </p>
         </div>
       </div>
 

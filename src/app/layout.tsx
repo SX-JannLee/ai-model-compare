@@ -24,6 +24,7 @@ export const metadata: Metadata = {
   authors: [{ name: SITE.name }],
   keywords: [
     "AI 模型对比",
+    "AI 模型选型",
     "大模型排行榜",
     "AI 模型评测",
     "LLM benchmark",

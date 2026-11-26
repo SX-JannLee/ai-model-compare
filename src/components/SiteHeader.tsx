@@ -4,6 +4,7 @@ import { SITE } from "@/lib/site";
 const nav = [
   { href: "/", label: "总览" },
   { href: "/models/", label: "模型库" },
+  { href: "/match/", label: "选型" },
   { href: "/compare/", label: "对比" },
   { href: "/benchmarks/", label: "评测方法" },
   { href: "/news/", label: "动态" },

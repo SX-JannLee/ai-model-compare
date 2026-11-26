@@ -1,10 +1,13 @@
 # 模型视界 · Model Lens
 
-前沿 AI 模型能力对比站点：把 **16 款模型 × 7 个能力维度**、API 价格、上下文与速度放在同一套口径下，用可交互图表展示差异。
+前沿 AI 模型能力对比与选型站点：把 **16 款模型 × 7 个能力维度**、API 价格、上下文与速度放在同一套口径下，用可交互图表展示差异，并按任务、预算与上下文给出可解释的候选。
 
 **在线站点：<https://sx-jannlee.github.io/ai-model-compare/>**
 
 - 纯静态构建，无后端、无运行时 API 调用
+- **v1.1 选型向导** `/match/`：四个偏好收敛到 3 个候选，偏好写入 URL
+- **可分享对比** `/compare/?models=...`：复制链接即可还原同一组模型
+- 更新日志 `/changelog/`，页脚显示当前版本
 - Next.js App Router + React + TypeScript
 - 图表为手写 SVG / DOM，不引入图表库
 - 支持 SEO 的静态导出：独立 metadata、canonical、OG、JSON-LD、sitemap、robots、RSS
@@ -16,7 +19,9 @@
 | `/` | 总览：智能排行、价格 × 能力散点、能力雷达、维度矩阵、最新动态 |
 | `/models/` | 可筛选、可排序的完整模型表 |
 | `/models/[slug]/` | 单模型详情：雷达、七维得分、价格与来源 |
-| `/compare/` | 最多 3 款模型的雷达叠加与指标对比 |
+| `/match/` | 选型向导：按任务、预算、上下文与开源偏好推荐前 3 款 |
+| `/compare/` | 最多 3 款模型的雷达叠加与指标对比，选择可写入链接分享 |
+| `/changelog/` | 版本更新日志与当前发布说明 |
 | `/benchmarks/` | 评测口径、取数规则与局限 |
 | `/news/` | 官方信源的前沿动态 |
 
@@ -74,9 +79,9 @@ npm run build
 ```
 src/
   app/                # 路由、metadata、sitemap/robots/feed
-  components/         # 图表、表格、导航、对比器
-  data/               # 模型与新闻快照
-  lib/site.ts         # 站点常量与 URL 工具
+  components/         # 图表、表格、导航、对比器、选型向导
+  data/               # 模型、新闻与版本记录快照
+  lib/                # 站点常量、对比 URL、选型评分
 tests/                # 数据完整性与 SSR 渲染测试
 scripts/              # 静态预览、截图与布局检查
 docs/evidence/        # Before / After 视觉证据
@@ -89,11 +94,13 @@ docs/evidence/        # Before / After 视觉证据
 
 ## 视觉证据
 
-`docs/evidence/` 保存同一场景、同一视口下的 Before / After 截图：
+`docs/evidence/v11/` 保存 v1.1 同一场景、同一视口下的 Before / After 截图：
 
-- `before-home.png`：初始脚手架（纯数据表）
-- `after-home.png` / `after-home-hero.png`：完成后的总览
-- `after-mobile.png`：390px 移动端
-- `after-model.png`、`after-compare.png`、`after-models.png`、`after-benchmarks.png`、`after-news.png`
+- `before-home-1440.png` / `before-home-1440-full.png`：v1.0 线上站点（d8c9739）
+- `after-home-1440.png` / `after-home-1440-full.png`：v1.1 总览
+- `before-home-390-full.png` / `after-home-390-full.png`：390px 移动端
+- `after-match.png` / `after-match-mobile.png`：选型向导
+- `after-compare-share.png`：带 `?models=` 的可分享对比
+- `after-changelog.png`：更新日志
 
 截图由 Playwright 生成；`scripts/audit.mjs` 会在 1440 / 1024 / 768 / 390 四种宽度下检查横向溢出、标题可见性、字体加载与控制台错误。
