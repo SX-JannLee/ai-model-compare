@@ -25,3 +25,10 @@ export const canonicalFor = (path: string): string => {
   if (path === "/") return `${SITE.url}${SITE.basePath}/`;
   return `${SITE.url}${SITE.basePath}${path}`;
 };
+/** Canonical + RSS alternate, shared by every route's metadata. */
+export const alternatesFor = (path: string) => ({
+  canonical: absoluteUrl(path),
+  types: {
+    "application/rss+xml": absoluteUrl("/feed.xml"),
+  },
+});
