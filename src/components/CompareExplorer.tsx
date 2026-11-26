@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { RadarChart } from "@/components/RadarChart";
 import {
   DIMENSIONS,
@@ -10,9 +10,18 @@ import {
   type Model,
   vendorColor,
 } from "@/data/models";
+import {
+  DEFAULT_COMPARE_SLUGS,
+  buildCompareUrl,
+  buildDefaultCompareUrl,
+  parseCompareSlugs,
+  toggleCompareSlug,
+} from "@/lib/compare";
 
 const PALETTE = ["#D8FF3E", "#FF7A59", "#7AA2FF"];
-const DEFAULT = ["claude-fable-5-2", "gpt-6-2-sol", "kimi-k3-1-pro"];
+
+const COPY_SUCCESS = "链接已复制";
+const COPY_FAILURE = "复制失败，请手动复制地址栏链接";
 
 interface Metric {
   label: string;
@@ -66,31 +75,233 @@ const metrics: Metric[] = [
   })),
 ];
 
+const sameSelection = (a: readonly string[], b: readonly string[]): boolean =>
+  a.length === b.length && a.every((slug, index) => slug === b[index]);
+
+/** Build an absolute, shareable URL for the current path and selection. */
+function compareUrlWith(slugs: readonly string[]): string | null {
+  try {
+    return buildCompareUrl(window.location.href, slugs);
+  } catch {
+    return null;
+  }
+}
+
+/** Build the current page URL with the selection parameter removed. */
+function compareUrlWithout(): string | null {
+  try {
+    return buildDefaultCompareUrl(window.location.href);
+  } catch {
+    return null;
+  }
+}
+
+/** Replace the address bar without navigating or reloading. */
+function replaceHistory(target: string | null): void {
+  if (!target) return;
+  try {
+    window.history.replaceState(window.history.state, "", target);
+  } catch {
+    // Sandboxed frames may block history updates; the selection still works.
+  }
+}
+
+/** Copy without the async Clipboard API, e.g. on older browsers or http. */
+function copyWithTextarea(text: string): boolean {
+  if (typeof document === "undefined" || !document.body) return false;
+
+  const previousFocus = document.activeElement as HTMLElement | null;
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.setAttribute("aria-hidden", "true");
+  textarea.tabIndex = -1;
+  textarea.style.position = "fixed";
+  textarea.style.top = "0";
+  textarea.style.left = "0";
+  textarea.style.width = "1px";
+  textarea.style.height = "1px";
+  textarea.style.padding = "0";
+  textarea.style.border = "none";
+  textarea.style.opacity = "0";
+  textarea.style.pointerEvents = "none";
+
+  try {
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    textarea.setSelectionRange(0, text.length);
+    return typeof document.execCommand === "function"
+      ? document.execCommand("copy")
+      : false;
+  } catch {
+    return false;
+  } finally {
+    try {
+      textarea.parentNode?.removeChild(textarea);
+      previousFocus?.focus?.();
+    } catch {
+      // Cleanup is best-effort; never mask the copy result with an error.
+    }
+  }
+}
 
 export function CompareExplorer() {
-  const [selected, setSelected] = useState<string[]>(DEFAULT);
+  const [selected, setSelected] = useState<string[]>([
+    ...DEFAULT_COMPARE_SLUGS,
+  ]);
+  const selectedRef = useRef<string[]>(selected);
+  const [copyStatus, setCopyStatus] = useState<string>("");
+  const statusTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Static export: read the query string after hydration rather than with
+  // useSearchParams, so the default trio can be server-rendered unchanged.
+  useEffect(() => {
+    const parsed = parseCompareSlugs(window.location.search);
+    if (sameSelection(selectedRef.current, parsed)) return;
+    selectedRef.current = parsed;
+    setSelected(parsed);
+  }, []);
+
+  useEffect(
+    () => () => {
+      if (statusTimer.current !== null) clearTimeout(statusTimer.current);
+    },
+    [],
+  );
 
   const chosen = useMemo(
     () => selected.map((slug) => getModel(slug)).filter(Boolean) as Model[],
     [selected],
   );
 
+  const applySelection = (next: string[]) => {
+    // Keep the ref ahead of React so copy/other handlers never read stale state.
+    selectedRef.current = next;
+    setSelected(next);
+  };
+
+  const announceCopy = (message: string) => {
+    if (statusTimer.current !== null) clearTimeout(statusTimer.current);
+    // Clear first so assistive technology re-announces identical messages.
+    setCopyStatus("");
+    statusTimer.current = setTimeout(() => {
+      statusTimer.current = null;
+      setCopyStatus(message);
+    }, 30);
+  };
+
+  const syncSelection = (next: string[]) => {
+    replaceHistory(compareUrlWith(next));
+  };
+
   const toggle = (slug: string) => {
-    setSelected((current) => {
-      if (current.includes(slug)) {
-        return current.length === 1
-          ? current
-          : current.filter((item) => item !== slug);
+    const current = selectedRef.current;
+    const next = toggleCompareSlug(current, slug);
+    if (sameSelection(current, next)) return;
+
+    applySelection(next);
+    syncSelection(next);
+  };
+
+  const resetSelection = () => {
+    applySelection([...DEFAULT_COMPARE_SLUGS]);
+    replaceHistory(compareUrlWithout());
+    if (statusTimer.current !== null) {
+      clearTimeout(statusTimer.current);
+      statusTimer.current = null;
+    }
+    setCopyStatus("");
+  };
+
+  const copyCompareLink = async () => {
+    // Build from the latest committed selection, not a pending URL update.
+    const target = compareUrlWith(selectedRef.current);
+    if (!target) {
+      announceCopy(COPY_FAILURE);
+      return;
+    }
+
+    let copied = false;
+
+    try {
+      if (
+        typeof navigator !== "undefined" &&
+        typeof navigator.clipboard?.writeText === "function"
+      ) {
+        await navigator.clipboard.writeText(target);
+        copied = true;
       }
-      if (current.length >= 3) {
-        return [...current.slice(1), slug];
+    } catch {
+      copied = false;
+    }
+
+    if (!copied) {
+      try {
+        copied = copyWithTextarea(target);
+      } catch {
+        copied = false;
       }
-      return [...current, slug];
-    });
+    }
+
+    announceCopy(copied ? COPY_SUCCESS : COPY_FAILURE);
   };
 
   return (
     <>
+      <div
+        role="group"
+        aria-label="分享与重置对比"
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          gap: "8px 12px",
+          marginTop: 24,
+        }}
+      >
+        <button
+          type="button"
+          className="btn btn-ghost btn-small"
+          onClick={() => void copyCompareLink()}
+          aria-describedby="compare-share-note"
+        >
+          复制对比链接
+        </button>
+        <button
+          type="button"
+          className="btn btn-ghost btn-small"
+          onClick={resetSelection}
+        >
+          重置选择
+        </button>
+        <p
+          id="compare-share-note"
+          className="compare-hint"
+          style={{ flex: "1 1 240px", minWidth: 0 }}
+        >
+          链接会保留当前选择，分享后打开即恢复同一组模型。
+        </p>
+      </div>
+      <p
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="compare-hint"
+        style={{
+          minHeight: "1.6em",
+          marginTop: 4,
+          color:
+            copyStatus === COPY_SUCCESS
+              ? "var(--lime)"
+              : copyStatus === COPY_FAILURE
+                ? "var(--coral)"
+                : "var(--faint)",
+        }}
+      >
+        {copyStatus}
+      </p>
+
       <div className="compare-chips" role="group" aria-label="选择要对比的模型">
         {models.map((model) => {
           const active = selected.includes(model.slug);
