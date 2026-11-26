@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      @page { size: 1200px 630px; }
+      html, body { width: 1200px; height: 630px; }
+      body {
+        background: #08090c;
+        color: #f4f2ec;
+        font-family: "Noto Sans CJK SC", "PingFang SC", sans-serif;
+        overflow: hidden;
+        position: relative;
+      }
+      .grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+        background-size: 60px 60px;
+        mask-image: radial-gradient(ellipse 80% 70% at 70% 20%, #000 10%, transparent 75%);
+      }
+      .glow {
+        position: absolute;
+        width: 620px; height: 620px;
+        right: -120px; top: -220px;
+        background: radial-gradient(circle, rgba(216,255,62,.20), transparent 62%);
+        filter: blur(10px);
+      }
+      .frame {
+        position: relative;
+        width: 100%; height: 100%;
+        padding: 44px 56px 40px;
+        display: flex; flex-direction: column;
+        border: 1px solid rgba(255,255,255,.12);
+        margin: 0;
+      }
+      .top { display: flex; justify-content: space-between; align-items: center; }
+      .brand { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 700; letter-spacing: .02em; }
+      .mark {
+        width: 30px; height: 30px; border: 2px solid #d8ff3e; border-radius: 7px;
+        display: grid; place-items: center;
+      }
+      .mark i { width: 11px; height: 11px; background: #d8ff3e; display: block; transform: rotate(45deg); }
+      .mono {
+        font-family: "DejaVu Sans Mono", monospace;
+        font-size: 11px; letter-spacing: .14em; color: #8f8c84; text-transform: uppercase;
+      }
+      .main { margin-top: 58px; }
+      .kicker {
+        font-family: "DejaVu Sans Mono", monospace;
+        color: #d8ff3e; font-size: 12px; letter-spacing: .16em;
+        display: flex; align-items: center; gap: 10px;
+      }
+      .kicker::before { content: ""; width: 26px; height: 1px; background: #d8ff3e; }
+      h1 {
+        margin-top: 20px;
+        font-size: 76px; line-height: 1.12; letter-spacing: -.045em; font-weight: 800;
+      }
+      h1 em { font-style: normal; color: #d8ff3e; }
+      .sub { margin-top: 18px; color: #a8a49b; font-size: 18px; letter-spacing: .01em; }
+      .stats {
+        margin-top: auto;
+        display: grid; grid-template-columns: repeat(3, 1fr);
+        border-top: 1px solid rgba(255,255,255,.14);
+      }
+      .stat { padding: 20px 24px 0 0; }
+      .stat + .stat { border-left: 1px solid rgba(255,255,255,.14); padding-left: 26px; }
+      .stat b {
+        display: block; font-size: 40px; line-height: 1; letter-spacing: -.04em;
+        font-weight: 700; font-variant-numeric: tabular-nums;
+      }
+      .stat span { display: block; margin-top: 9px; color: #8f8c84; font-size: 12px; }
+      .stat .accent { color: #d8ff3e; }
+      .footer {
+        margin-top: 26px; display: flex; justify-content: space-between;
+        font-family: "DejaVu Sans Mono", monospace; font-size: 10px;
+        color: #6f6c65; letter-spacing: .1em; text-transform: uppercase;
+      }
+      .footer b { color: #a8a49b; font-weight: 400; }
+    </style>
+  </head>
+  <body>
+    <div class="grid"></div>
+    <div class="glow"></div>
+    <div class="frame">
+      <div class="top">
+        <div class="brand"><span class="mark"><i></i></span>模型视界</div>
+        <span class="mono">Model Lens / Frontier AI Index</span>
+      </div>
+      <div class="main">
+        <p class="kicker">Snapshot 2026.11.26 · Artificial Analysis v5.0.2</p>
+        <h1>看清前沿模型<br /><em>的真实差距</em></h1>
+        <p class="sub">16 款模型 · 7 个能力维度 · 真实 API 价格</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>64.8</b><span>综合智能第一 · Claude Fable 5.2</span></div>
+        <div class="stat"><b class="accent">$1.01</b><span>单任务成本 · GPT-6.2 Sol</span></div>
+        <div class="stat"><b>68.2</b><span>智能体最高 · Kimi K3.1 Pro（开源）</span></div>
+      </div>
+      <div class="footer">
+        <span>Interactive charts · Model detail · Side-by-side compare</span>
+        <span><b>sx-jannlee.github.io/ai-model-compare</b></span>
+      </div>
+    </div>
+  </body>
+</html>
