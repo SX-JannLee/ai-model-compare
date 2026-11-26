@@ -2,6 +2,8 @@
 
 前沿 AI 模型能力对比站点：把 **16 款模型 × 7 个能力维度**、API 价格、上下文与速度放在同一套口径下，用可交互图表展示差异。
 
+**在线站点：<https://sx-jannlee.github.io/ai-model-compare/>**
+
 - 纯静态构建，无后端、无运行时 API 调用
 - Next.js App Router + React + TypeScript
 - 图表为手写 SVG / DOM，不引入图表库

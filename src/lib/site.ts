@@ -10,7 +10,6 @@ export const SITE = {
   dataDate: "2026-11-26",
   sourceName: "Artificial Analysis",
   sourceUrl: "https://artificialanalysis.ai/",
-  twitter: "",
 };
 
 export const absoluteUrl = (path = "/"): string => {

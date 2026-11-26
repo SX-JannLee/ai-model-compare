@@ -113,7 +113,7 @@ export default function HomePage() {
           <aside className="hero-card" aria-label="综合智能前五名">
             <div className="card-head">
               <span>Intelligence · Top 5</span>
-              <span className="live">Live snapshot</span>
+              <span className="live">Data snapshot</span>
             </div>
             <ol className="podium">
               {topFive.map((model, index) => (
