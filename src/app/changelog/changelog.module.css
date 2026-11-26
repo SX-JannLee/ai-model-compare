@@ -1,0 +1,518 @@
+.hero {
+  position: relative;
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: start;
+}
+
+.heroCopy {
+  min-width: 0;
+}
+
+.heroCopy :global(.eyebrow) {
+  margin-top: 0;
+  margin-bottom: 22px;
+  font-size: 11px;
+  color: var(--lime);
+}
+
+.heroBreak {
+  display: block;
+  color: var(--lime);
+}
+
+.heroCopy .lede {
+  max-width: 56ch;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+/* ---------- Current version card ---------- */
+
+.versionCard {
+  position: relative;
+  overflow: hidden;
+  padding: 24px;
+  border: 1px solid rgba(216, 255, 62, 0.28);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(216, 255, 62, 0.12), transparent 58%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.04), transparent 55%),
+    var(--panel);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+}
+
+.versionCard::after {
+  content: "";
+  position: absolute;
+  right: -70px;
+  top: -90px;
+  width: 200px;
+  height: 200px;
+  border: 1px solid rgba(216, 255, 62, 0.14);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.versionCard .versionLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.versionCard .versionNumber {
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: clamp(2.9rem, 5.6vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.055em;
+  color: var(--lime);
+  font-variant-numeric: tabular-nums;
+}
+
+.versionMeta {
+  display: grid;
+  gap: 0;
+  margin: 22px 0 0;
+}
+
+.versionMeta div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 0;
+  border-top: 1px solid var(--line);
+}
+
+.versionMeta dt {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  white-space: nowrap;
+}
+
+.versionMeta dd {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.versionCard .versionNote {
+  margin-top: 18px;
+  color: var(--faint);
+  font-size: 11.5px;
+  line-height: 1.7;
+}
+
+.versionLink {
+  display: inline-block;
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  color: var(--lime);
+}
+
+.versionLink:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Section heading ---------- */
+
+.sectionHead {
+  margin-bottom: 34px;
+}
+
+.sectionKicker {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lime);
+}
+
+.sectionTitle {
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.sectionDesc {
+  max-width: 62ch;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* ---------- Timeline ---------- */
+
+.timeline {
+  display: grid;
+  gap: 26px;
+}
+
+.release {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 20px;
+  scroll-margin-top: 96px;
+}
+
+.rail {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.railDot {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: 9px;
+  height: 9px;
+  margin-top: 27px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 0 5px rgba(216, 255, 62, 0.1);
+}
+
+.railLine {
+  position: absolute;
+  top: 18px;
+  bottom: -26px;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgba(216, 255, 62, 0.35),
+    rgba(255, 255, 255, 0.07)
+  );
+}
+
+.release:last-child .railLine {
+  display: none;
+}
+
+.card {
+  min-width: 0;
+  padding: 24px 26px 26px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.026), transparent 42%),
+    var(--panel);
+  transition: border-color 0.2s var(--ease);
+}
+
+.card:hover {
+  border-color: var(--line-strong);
+}
+
+.release:target .card {
+  border-color: rgba(216, 255, 62, 0.42);
+}
+
+.cardTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.anchor {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--lime);
+  border: 1px solid rgba(216, 255, 62, 0.3);
+  background: var(--lime-soft);
+  border-radius: 999px;
+  padding: 3px 10px;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.anchor:hover {
+  background: rgba(216, 255, 62, 0.18);
+  border-color: rgba(216, 255, 62, 0.55);
+}
+
+.currentBadge {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+
+.releaseDate {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.releaseTitle {
+  margin-top: 16px;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.4vw, 1.65rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.releaseSummary {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.subhead {
+  margin: 24px 0 10px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.highlights {
+  display: grid;
+  gap: 8px;
+}
+
+.highlights li {
+  position: relative;
+  padding-left: 19px;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.75;
+}
+
+.highlights li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--lime);
+}
+
+.fixes li::before {
+  background: var(--line-strong);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.link:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+/* ---------- Data & scope ---------- */
+
+.scope {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: clamp(28px, 5vw, 48px);
+  align-items: start;
+}
+
+.scopeCopy {
+  min-width: 0;
+}
+
+.scopeCopy p:not(.sectionKicker) {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 14.5px;
+  line-height: 1.85;
+  max-width: 72ch;
+}
+
+.scopeCopy a {
+  color: var(--lime);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.scopeCard {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+.scopeLabel {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.scopeDate {
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  color: var(--lime);
+  font-variant-numeric: tabular-nums;
+}
+
+.scopeMeta {
+  display: grid;
+  margin: 20px 0 0;
+}
+
+.scopeMeta div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+}
+
+.scopeMeta dt {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.07em;
+  color: var(--faint);
+  white-space: nowrap;
+}
+
+.scopeMeta dd {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text);
+  text-align: right;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 980px) {
+  .heroInner {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .versionCard {
+    max-width: 520px;
+  }
+
+  .scope {
+    grid-template-columns: 1fr;
+  }
+
+  .scopeCard {
+    max-width: 520px;
+  }
+}
+
+@media (max-width: 760px) {
+  .heroActions {
+    margin-top: 24px;
+  }
+
+  .timeline {
+    gap: 20px;
+  }
+
+  .release {
+    grid-template-columns: 18px minmax(0, 1fr);
+    gap: 14px;
+    scroll-margin-top: 84px;
+  }
+
+  .railDot {
+    width: 8px;
+    height: 8px;
+    margin-top: 23px;
+    box-shadow: 0 0 0 4px rgba(216, 255, 62, 0.1);
+  }
+
+  .railLine {
+    top: 16px;
+    bottom: -20px;
+  }
+
+  .card {
+    padding: 20px 18px 22px;
+  }
+
+  .releaseDate {
+    margin-left: 0;
+  }
+
+  .versionCard {
+    max-width: none;
+    padding: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .versionCard .versionNumber {
+    font-size: 2.9rem;
+  }
+
+  .highlights li {
+    font-size: 13px;
+  }
+
+  .scopeCard {
+    padding: 18px;
+  }
+}

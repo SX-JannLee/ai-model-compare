@@ -7,6 +7,8 @@ export const SITE = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://sx-jannlee.github.io",
   basePath: process.env.NEXT_PUBLIC_BASE_PATH ?? "",
   repo: "https://github.com/SX-JannLee/ai-model-compare",
+  version: "1.1.0",
+  releaseDate: "2026-11-26",
   dataDate: "2026-11-26",
   sourceName: "Artificial Analysis",
   sourceUrl: "https://artificialanalysis.ai/",
